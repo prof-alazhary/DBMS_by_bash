@@ -1,6 +1,6 @@
 #!/bin/bash
 PS3='Select your choice number and press Enter: '
-select choice in createDB DropDB RenameDB Exit
+select choice in createDB DropDB RenameDB UseDB Exit
 do
   case $choice in
   createDB)
@@ -21,6 +21,31 @@ do
     read newName
     mv $oldName $newName
   ;;
+  #####################################################
+  UseDB)
+    echo "Enter Database name: "
+    read name;
+    cd $name
+    PS3='Select your choice number and press Enter: '
+    select Tchoice in createTable Exit
+    do
+      case $Tchoice in
+    createTable)
+    echo "Enter Table name: "
+    read Tname;
+    touch $Tname
+    ;;
+    Exit)
+      break
+    ;;
+    *) print $REPLY is not one of the choices.
+    ;;
+
+      esac
+    done
+
+  ;;
+  ##########################################################
   Exit)
     break
   ;;

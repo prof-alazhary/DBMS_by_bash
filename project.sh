@@ -21,31 +21,69 @@ do
     read newName
     mv $oldName $newName
   ;;
-  #####################################################
+  ##################### UseDB ############################
   UseDB)
     echo "Enter Database name: "
     read name;
     cd $name
     PS3='Select your choice number and press Enter: '
-    select Tchoice in createTable Exit
+    select Tchoice in createTable deleteRow dropTable Exit
     do
       case $Tchoice in
-    createTable)
-    echo "Enter Table name: "
-    read Tname;
-    touch $Tname
-    ;;
-    Exit)
-      break
-    ;;
-    *) print $REPLY is not one of the choices.
-    ;;
+      #################createTable##########################
+      createTable)
+        #createTable;
+        echo "Enter Table name: "
+        read Tname;
+        touch $Tname
+        echo "Enter number of cols: "
+        read numcol;
+        for (( i = 0; i < numcol; i++ )); do
+          echo "Enter col name: ";
+          read colName;
+          names[i]=colName;
+        done
+        #----------------------
+        for (( i = 0; i < numcol; i++ )); do
+          echo names[i]:>>Tname;
+        done
+      ;;
+      #------------------------------------------------------
+      deleteRow)
+        select dchoice in deleteAll deleteRow  Exit
+        do
+          case $dchoice in
+            deleteAll)
+              echo "Enter Table name: "
+              read tableName
+              # echo "delete from $tableName where "
+              # read stmt
+              sed -i 'd' $tableName
+            ;;
+            deleteRow);;
+            Exit)
+              break 2;
+            ;;
+          esac
+        done
+      ;;
+      #------------------------------------------------------
+      dropTable)
+        echo "Enter Table Name: "
+        read name;
+        rm -f $name;
+      ;;
+      Exit)
+        break
+      ;;
+      *) print $REPLY is not one of the choices.
+      ;;
 
       esac
     done
 
   ;;
-  ##########################################################
+  #---------------------------------------------------------
   Exit)
     break
   ;;
@@ -54,4 +92,10 @@ do
   ;;
   esac
 done
-#if no use db dont creat tb and option use db
+#in useDb check if not exist
+#-------------------------------------------------------------------------------
+# createTable(){
+#
+#
+#
+# }

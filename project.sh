@@ -1,5 +1,6 @@
 #!/bin/bash
-
+my_dir="$(dirname "$0")";
+"$my_dir/insertTable.sh";
 
 
 # createTable ----------------------------------------------
@@ -26,6 +27,19 @@ createTableFun(){
 
   done
 
+}
+# insert -------------------------------------------------
+insertData() {
+   awk 'BEGIN{FS=":"; max=0} {if ($1>max) max=$1} END{id=$max+1; print ""id":'$1'" >>"'$2'"}' $2
+}
+insert(){
+
+  echo "Enter Table name: "
+  read tableName
+  #echo $PWD
+  read -p "Enter your data to insert like this name:age "
+  echo $REPLY
+  insertData $REPLY $PWD"/"$tableName
 }
 # delete -------------------------------------------------
 delete(){
@@ -83,13 +97,17 @@ useDB(){
   read name;
   cd $name
   PS3='Select your choice number and press Enter: '
-  select Tchoice in createTable deleteData SelectData dropTable Exit
+  select Tchoice in createTable insertData deleteData SelectData dropTable Exit
   do
     case $Tchoice in
 
     createTable)
       createTableFun
 
+    ;;
+    #------------------------------------------------------
+    insertData)
+      insert
     ;;
     #------------------------------------------------------
     deleteData)

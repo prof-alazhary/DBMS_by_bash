@@ -1,6 +1,6 @@
 #!/bin/bash
 my_dir="$(dirname "$0")";
-"$my_dir/insertTable.sh";
+source "$my_dir/insertTable.sh";
 
 
 # createTable ----------------------------------------------
@@ -29,9 +29,6 @@ createTableFun(){
 
 }
 # insert -------------------------------------------------
-insertData() {
-   awk 'BEGIN{FS=":"; max=0} {if ($1>max) max=$1} END{id=$max+1; print ""id":'$1'" >>"'$2'"}' $2
-}
 insert(){
 
   echo "Enter Table name: "

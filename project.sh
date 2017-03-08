@@ -30,22 +30,51 @@ createTableFun(){
 # delete -------------------------------------------------
 delete(){
 
+  echo "Enter Table name: "
+  read tableName
+
   select dchoice in deleteAll deleteRow  Exit
   do
     case $dchoice in
       deleteAll)
-        echo "Enter Table name: "
-        read tableName
-        # echo "delete from $tableName where "
-        # read stmt
         sed -i 'd' $tableName
       ;;
-      deleteRow);;
+      deleteRow)
+        echo -n "Enter column name:  "
+        read column
+        echo -n "Enter value:  "
+        read value
+        sed -i "/$value/d" $tableName
+      ;;
       Exit)
         break 2;
       ;;
     esac
   done
+}
+# Update----------------------------------------------------
+# select----------------------------------------------------
+selectData(){
+  echo "Enter Table name: "
+  read tableName;
+  select dchoice in selectAll selectCol  Exit
+  do
+    case $dchoice in
+      selectAll)
+        #awk -F: "{print $0}" $tableName
+         awk -F: '{print $0}' $tableName
+      ;;
+      selectCol)
+        echo -n "Enter column name:  "
+        read column
+        awk  -v "/$value/d" $tableName
+      ;;
+      Exit)
+        break 2;
+      ;;
+    esac
+  done
+
 }
 # UseDB ----------------------------------------------------
 useDB(){
@@ -54,7 +83,7 @@ useDB(){
   read name;
   cd $name
   PS3='Select your choice number and press Enter: '
-  select Tchoice in createTable deleteRow dropTable Exit
+  select Tchoice in createTable deleteData SelectData dropTable Exit
   do
     case $Tchoice in
 
@@ -63,8 +92,12 @@ useDB(){
 
     ;;
     #------------------------------------------------------
-    deleteRow)
+    deleteData)
       delete
+    ;;
+    #------------------------------------------------------
+    SelectData)
+      selectData
     ;;
     #------------------------------------------------------
     dropTable)
@@ -75,7 +108,7 @@ useDB(){
     Exit)
       break
     ;;
-    *) print $REPLY is not one of the choices.
+    *) echo $REPLY is not one of the choices.
     ;;
 
     esac

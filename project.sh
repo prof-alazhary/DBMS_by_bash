@@ -115,7 +115,7 @@ do
     break
   ;;
 
-  *) print $REPLY is not one of the choices.
+  *) echo $REPLY is not one of the choices.
   ;;
   esac
 done

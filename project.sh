@@ -1,5 +1,6 @@
 #!/bin/bash
-
+my_dir="$(dirname "$0")";
+source "$my_dir/insertTable.sh";
 
 # createTable ----------------------------------------------
 createTableFun(){
@@ -17,7 +18,7 @@ createTableFun(){
     names[$i]=$colName;
     types[$i]=$dataT;
   done
-
+ echo "Done .."
   # datatype--------------------------
   for (( i = 0; i < numcol; i++ )); do
 
@@ -41,6 +42,16 @@ createTableFun(){
 
 
 }
+# insert -------------------------------------------------
+insert(){
+
+  echo "Enter Table name: "
+  read tableName
+  #echo $PWD
+  read -p "Enter your data to insert like this name:age "
+  echo $REPLY
+  insertData $REPLY $PWD"/"$tableName
+}
 # delete -------------------------------------------------
 delete(){
 
@@ -52,6 +63,7 @@ delete(){
     case $dchoice in
       deleteAll)
         sed -i 'd' $tableName
+        echo "Deleted .. "
       ;;
       deleteRow)
         echo -n "Enter column name:  "
@@ -60,9 +72,10 @@ delete(){
         echo -n "Enter value:  "
         read value
         sed -i "/$value/d" $tableName
+        echo "Deleted .. "
       ;;
       Exit)
-        break 2;
+        return;
       ;;
     esac
   done
@@ -88,7 +101,11 @@ update(){
   svalueNum=$(awk -F: 'BEGIN{NF=='$colSnum'}{for(i=1;i<=NF;i++){if($i=="'$svalue'") {print NR; break}}}' $tableName)
   echo $svalueNum;
 
-  awk -v tmp="$colUNum" -F: '{if(NR=='$svalueNum'){$tmp="'$newValue'" }}' $tableName;
+  oldValue=$(awk -v tmp="$colUNum" -F: '{if(NR=='$svalueNum'){print $tmp }}' $tableName)
+
+  sed -i 's/'$oldValue'/'$newValue'/' $tableName
+
+  #awk -v tmp="$colUNum" -F: '{if(NR=='$svalueNum'){$tmp="'$newValue'" }}' $tableName;
 
 
 
@@ -112,7 +129,7 @@ selectData(){
 
       ;;
       Exit)
-        break 2;
+        return;
       ;;
     esac
   done
@@ -127,12 +144,11 @@ useDB(){
     cd $name;
   else
     echo "Database not found ..."
-    #call menu
-    break;
+    return;
   fi
 
   PS3='Select DB operation: '
-  select Tchoice in createTable deleteData SelectData UpdateData dropTable Exit
+  select Tchoice in createTable insertData SelectData UpdateData deleteData dropTable Exit
   do
     case $Tchoice in
 
@@ -140,28 +156,33 @@ useDB(){
       createTableFun
 
     ;;
-    #------------------------------------------------------
-    deleteData)
-      delete
-    ;;
-    #------------------------------------------------------
+    #--------------------------------------
+    insertData)
+      insert
+      ;;
+    #---------------------------------------
     SelectData)
       selectData
     ;;
-    #------------------------------------------------------
+    #---------------------------------------
     UpdateData)
       update
     ;;
-    #------------------------------------------------------
+    #---------------------------------------
+    deleteData)
+      delete
+    ;;
+    #---------------------------------------
     dropTable)
       echo -n "Enter Table Name: "
       read name;
       rm -f $name;
+      echo "Table have been removed"
     ;;
     Exit)
       break
     ;;
-    *) print $REPLY is not one of the choices.
+    *) echo $REPLY "is not one of the choices".
     ;;
 
     esac
@@ -189,7 +210,7 @@ do
     echo -n "Enter Database name: "
     read name
     rm  -r $name
-    echo "successfuly removed"
+    echo "successfuly removed .. "
   ;;
   RenameDB)
     echo -n "Enter The old name: "
@@ -197,6 +218,7 @@ do
     echo -n "Enter The new name: "
     read newName
     mv $oldName $newName
+    echo "Done .. "
   ;;
 
   UseDB)
@@ -204,10 +226,11 @@ do
   ;;
 
   Exit)
+    echo "Bye :) .. "
     break
   ;;
 
-  *) print $REPLY is not one of the choices.
+  *) echo $REPLY "is not one of the choices".
   ;;
   esac
 done

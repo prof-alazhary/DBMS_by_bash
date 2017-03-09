@@ -1,6 +1,8 @@
 #!/bin/bash
 my_dir="$(dirname "$0")";
 source "$my_dir/insertTable.sh";
+source "$my_dir/select_column.sh";
+source "$my_dir/aggregate_function.sh";
 
 # createTable ----------------------------------------------
 createTableFun(){

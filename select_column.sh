@@ -28,8 +28,8 @@ function selectColumn()
                 print arr[x]
           }' $2
 }
-read -p "chose your table : "
-table=$REPLY;
-read -p "enter your column to select : "
-colmnName=$REPLY;
-selectColumn $colmnName $PWD/$table
+# read -p "chose your table : "
+# table=$REPLY;
+# read -p "enter your column to select : "
+# colmnName=$REPLY;
+# selectColumn $colmnName $PWD/$table

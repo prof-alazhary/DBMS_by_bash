@@ -2,6 +2,7 @@
 my_dir="$(dirname "$0")";
 source "$my_dir/insertTable.sh";
 
+
 # createTable ----------------------------------------------
 createTableFun(){
 
@@ -99,14 +100,13 @@ update(){
   colSnum=$(awk -F: '{if(NR==1){for(i=1;i<=NF;i++){if($i=="'$colS'") print i}}}' $tableName)
 
   svalueNum=$(awk -F: 'BEGIN{NF=='$colSnum'}{for(i=1;i<=NF;i++){if($i=="'$svalue'") {print NR; break}}}' $tableName)
-  echo $svalueNum;
 
   oldValue=$(awk -v tmp="$colUNum" -F: '{if(NR=='$svalueNum'){print $tmp }}' $tableName)
 
-  sed -i 's/'$oldValue'/'$newValue'/' $tableName
+  sed -i  $svalueNum's/'$oldValue'/'$newValue'/' $tableName
 
   #awk -v tmp="$colUNum" -F: '{if(NR=='$svalueNum'){$tmp="'$newValue'" }}' $tableName;
-
+  echo "Done .. "
 
 
 }

@@ -57,15 +57,15 @@ awk -v  myCol="$1" \
         print mini;
      }' $2
 }
-colmnName=id;
-mini=$(getMini $colmnName ./mydb1/table1);
-echo "mini="$mini;
+# colmnName=id;
+# mini=$(getMini $colmnName ./mydb1/table1);
+# echo "mini="$mini;
 function getCount()
 {
 awk 'BEGIN{FS=":"}{}END{print NR-2;}' $1
 }
-count=$(getCount ./mydb1/table1);
-echo "count="$count;
+# count=$(getCount ./mydb1/table1);
+# echo "count="$count;
 function getSum()
 {
 awk -v myCol="$1" \
@@ -89,14 +89,14 @@ awk -v myCol="$1" \
       }
       END{print sum;}' $2
 }
-colmnName=id;
-Sum=$(getSum $colmnName ./mydb1/table1);
-echo "Sum="$Sum;
+# colmnName=id;
+# Sum=$(getSum $colmnName ./mydb1/table1);
+# echo "Sum="$Sum;
 function getAVG() {
   count=$(getCount $2);
   Sum=$(getSum $1 $2);
   awk -v sum="$Sum" 'BEGIN{print sum/'$count';}'
 }
-colmnName=id;
-avg=$(getAVG $colmnName ./mydb1/table1);
-echo "avg="$avg;
+# colmnName=id;
+# avg=$(getAVG $colmnName ./mydb1/table1);
+# echo "avg="$avg;

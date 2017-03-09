@@ -92,18 +92,26 @@ update(){
   read colU;
   echo -n "Enter new value: "
   read newValue;
-  colUNum=$(awk -F: '{if(NR==1){for(i=1;i<=NF;i++){if($i=="'$colU'") print i}}}' $tableName)
+  colUNum=$(awk -F: '{if(NR==2){for(i=1;i<=NF;i++)
+                            {if($i=="'$colU'") print i}}}' $tableName)
 
   echo -n "Enter column which will help to select value: "
   read colS
   echo -n "Enter its value: "
   read svalue
-  colSnum=$(awk -F: '{if(NR==1){for(i=1;i<=NF;i++){if($i=="'$colS'") print i}}}' $tableName)
+  colSnum=$(awk -F: '{if(NR==2){
+                        for(i=1;i<=NF;i++){
+                          if($i=="'$colS'")
+                            print i;
+                          }
+                        }
+                      }' $tableName)
 
-  svalueNum=$(awk -F: 'BEGIN{NF=='$colSnum'}{for(i=1;i<=NF;i++){if($i=="'$svalue'") {print NR; break}}}' $tableName)
+  svalueNum=$(awk -F: 'BEGIN{NF='$colSnum'}
+          {for(i=1;i<=NF;i++){if($i=="'$svalue'") {print NR; break}}}' $tableName)
   echo $svalueNum;
 
-  oldValue=$(awk -v tmp="$colUNum" -F: '{if(NR=='$svalueNum'){print $tmp }}' $tableName)
+  oldValue=$(awk -v tmp="$colUNum" -F: '{if(NR=='$svalueNum'){print tmp }}' $tableName)
 
   sed -i 's/'$oldValue'/'$newValue'/' $tableName
 
